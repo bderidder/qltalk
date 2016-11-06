@@ -3,10 +3,9 @@ local L = QLTalk.L
 
 LibStub("AceAddon-3.0"):NewAddon(QLTalk, addonName, "AceConsole-3.0")
 
---
 function QLTalk:OnInitialize()
   -- Startup Message
-  QLTalk:Print('QL talk version 0.1 loaded and ready to talk... (444)')
+  QLTalk:Print('QLTalk version ' .. QLTalk.VERSION .. ' loaded and ready to talk')
 
   QLTalk:Setup()
 end
