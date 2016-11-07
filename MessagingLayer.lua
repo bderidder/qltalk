@@ -37,9 +37,9 @@ function MessagingLayer:SendLocalMessage(message)
     self:sendLocalMessage(bnAccountId, rawMessage)
 end
 
-function MessagingLayer:SendBattleNetMessage(bnAccountId, message)
+function MessagingLayer:SendBNMessage(message)
     local rawMessage = message:createMessage()
-    self:sendBNMessage(bnAccountId, rawMessage)
+    self:broadcastBNMessage(rawMessage)
 end
 
 function MessagingLayer:RegisterLocalMessageListener(localMessageListener)
@@ -54,8 +54,22 @@ function MessagingLayer:sendLocalMessage(localRawMessage)
     SendAddonMessage(QLTalk.QLTALK_ADDON_MSG_PREFIX, rawMessage, "GUILD")
 end
 
-function MessagingLayer:sendBNMessage(bnAccountId, bnRawMessage)
-    BNSendGameData(bnAccountId, QLTalk.QLTALK_BN_MSG_PREFIX, bnRawMessage)
+function MessagingLayer:broadcastBNMessage(bnRawMessage)
+    
+    numFriends = BNGetNumFriends();
+
+    for i=1,numFriends do 
+        bnetIDAccount, accountName, battleTag, isBattleTagPresence, 
+        characterName, bnetIDGameAccount, client, isOnline, lastOnline, 
+        isAFK, isDND, messageText, noteText, isRIDFriend, messageTime, 
+        canSoR, isReferAFriend, canSummonFriend = BNGetFriendInfo(i);
+
+        if (isOnline and (client == "WoW")) then
+            BNSendGameData(bnetIDGameAccount, QLTalk.QLTALK_BN_MSG_PREFIX, bnRawMessage)
+        end
+
+    end
+
 end
 
 -- Processes add on messages recevied from the GUILD
