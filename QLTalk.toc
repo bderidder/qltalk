@@ -11,6 +11,7 @@ libs\AceConsole-3.0\AceConsole-3.0.xml
 Constants.lua
 Core.lua
 Utils.lua
+LinkedList.lua
 BNFriends.lua
 Messages.lua
 MessagingLayer.lua
