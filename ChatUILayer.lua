@@ -58,7 +58,7 @@ function ChatUILayer:localChatMsgHandler(fromName, fromGuild, fromRealm, message
 end
 
 function ChatUILayer:formatMessagePrefix(fromName, fromGuild, fromRealm)
-    return "\[QLTalk\] " .. fromName .. "-" .. fromRealm .. ": "
+    return "\[QLTalk\] <" .. fromName .. "-" .. fromRealm .. "> "
 end
 
 QLTalk.ChatUILayer = ChatUILayer
