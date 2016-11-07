@@ -11,20 +11,20 @@ end
 
 local function DumpWithIndent(o, currentIndent)
     if (type(o) == "nil") then
-        QLTalk:Print("nil")
+        QLTalk:Debug("nil")
     elseif (type(o) == "string") then
-        QLTalk:Print(o)
+        QLTalk:Debug(o)
     elseif (type(o) == "table") then
-        QLTalk:Print(GetDumpIndentFormatting(currentIndent) .. "{\n")
+        QLTalk:Debug(GetDumpIndentFormatting(currentIndent) .. "{\n")
         for k, v in pairs(o) do
-            QLTalk:Print(GetDumpIndentFormatting(currentIndent) .. k .. ": ")
+            QLTalk:Debug(GetDumpIndentFormatting(currentIndent) .. k .. ": ")
             DumpWithIndent(v, currentIndent+1)
         end
-        QLTalk:Print(GetDumpIndentFormatting(currentIndent) .. "}")
+        QLTalk:Debug(GetDumpIndentFormatting(currentIndent) .. "}")
     elseif (type(o) == "function") then
-        QLTalk:Print("function")
+        QLTalk:Debug("function")
     else
-        QLTalk:Print(type(o))
+        QLTalk:Debug(type(o))
     end
 end
 
@@ -32,9 +32,9 @@ function QLTalk:Dump(o, label)
     if (label == nil) then
         label = type(o)
     end
-    QLTalk:Print("Start variable dump - " .. label)
+    QLTalk:Debug("Start variable dump - " .. label)
     DumpWithIndent(o, 0)
-    QLTalk:Print("End variable dump")
+    QLTalk:Debug("End variable dump")
 end
 
 function QLTalk:Debug(debugMessage)
