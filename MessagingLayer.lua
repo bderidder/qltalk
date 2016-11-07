@@ -104,10 +104,12 @@ function MessagingLayer:UnmarshalMessage(rawMessage)
 
     if (messageType == "ChatMessage") then
         return QLTalk.ChatMessage:new{
-            character = messageParts[2],
-            guild     = messageParts[3],
-            realm     = messageParts[4],
-            message   = messageParts[5],
+            timestamp = messageParts[2],
+            messageId = messageParts[3],
+            character = messageParts[4],
+            guild     = messageParts[5],
+            realm     = messageParts[6],
+            message   = messageParts[7],
             }
     end
 

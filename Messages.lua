@@ -51,7 +51,7 @@ function ChatMessage:getMessageName()
 end
 
 function ChatMessage:getParameterArray()
-    return {self.character, self.guild, self.realm, self.message};
+    return {self.timestamp, self.messageId, self.character, self.guild, self.realm, self.message};
 end
 
 QLTalk.ChatMessage = ChatMessage;

@@ -33,6 +33,8 @@ end
 
 function ChatLayer:SendChatMessage(fromCharacter, fromGuild, fromRealm, messageText)
     chatMessage = QLTalk.ChatMessage:new{
+        timestamp = time(),
+        messageId = math.random(QLTalk.RANDOM_MAX),
         character = fromCharacter,
         guild     = fromGuild,
         realm     = fromRealm,
