@@ -16,45 +16,46 @@ function MessagingLayer:InitLayer()
     local mySelf = self
 
     RegisterAddonMessagePrefix(QLTalk.QLTALK_ADDON_MSG_PREFIX)
+    RegisterAddonMessagePrefix(QLTalk.QLTALK_BN_MSG_PREFIX)
     QLTalk.frame:RegisterEvent("CHAT_MSG_ADDON")
     QLTalk.frame:RegisterEvent("BN_CHAT_MSG_ADDON")
     QLTalk.frame:SetScript(
         "OnEvent",
         function(self, event, ...)
-        if (event == "CHAT_MSG_ADDON") then
-            local prefix, message, type, senderId = ...
-            mySelf:localChatMsgHandler(event, prefix, message, type, senderId)
-        elseif (event == "BN_CHAT_MSG_ADDON") then
-            local prefix, message, type, senderId = ...
-            mySelf:bnChatMsgHandler(event, prefix, message, type, senderId)
-        end
+            if (event == "CHAT_MSG_ADDON") then
+                local prefix, message, type, senderId = ...
+                mySelf:_localChatMsgHandler(event, prefix, message, type, senderId)
+            elseif (event == "BN_CHAT_MSG_ADDON") then
+                local prefix, message, type, senderId = ...
+                mySelf:_bnChatMsgHandler(event, prefix, message, type, senderId)
+            end
         end
     )
 end
 
 function MessagingLayer:SendLocalMessage(message)
     local rawMessage = message:createMessage()
-    self:sendLocalMessage(bnAccountId, rawMessage)
+    self:_sendLocalMessage(bnAccountId, rawMessage)
 end
 
 function MessagingLayer:SendBNMessage(message)
     local rawMessage = message:createMessage()
-    self:broadcastBNMessage(rawMessage)
+    self:_broadcastBNMessage(rawMessage)
 end
 
 function MessagingLayer:RegisterLocalMessageListener(localMessageListener)
-    self.localMessageListener = localMessageListener
+    self._localMessageListener = localMessageListener
 end
 
 function MessagingLayer:RegisterBNMessageListener(bnMessageListener)
-    self.bnMessageListener = bnMessageListener
+    self._bnMessageListener = bnMessageListener
 end
 
-function MessagingLayer:sendLocalMessage(localRawMessage)
+function MessagingLayer:_sendLocalMessage(localRawMessage)
     SendAddonMessage(QLTalk.QLTALK_ADDON_MSG_PREFIX, rawMessage, "GUILD")
 end
 
-function MessagingLayer:broadcastBNMessage(bnRawMessage)
+function MessagingLayer:_broadcastBNMessage(bnRawMessage)
     
     numFriends = BNGetNumFriends();
 
@@ -73,25 +74,25 @@ function MessagingLayer:broadcastBNMessage(bnRawMessage)
 end
 
 -- Processes add on messages recevied from the GUILD
-function MessagingLayer:localChatMsgHandler(event, prefix, message, type, senderId)
+function MessagingLayer:_localChatMsgHandler(event, prefix, message, type, senderId)
     if (prefix == QLTalk.QLTALK_ADDON_MSG_PREFIX) then
-        local msgObject = self:UnmarshalMessage(message)
-        self:localMessageListener(msgObject)
+        local msgObject = self:_unmarshalMessage(message)
+        self:_localMessageListener(msgObject)
     end
 end
 
 -- Processes add on messages recevied from a BattleNet friend
-function MessagingLayer:bnChatMsgHandler(event, prefix, message, type, senderId)
+function MessagingLayer:_bnChatMsgHandler(event, prefix, message, type, senderId)
     if (prefix == QLTalk.QLTALK_BN_MSG_PREFIX) then
-        local msgObject = self:UnmarshalMessage(message)
-        self:bnMessageListener(msgObject)
+        local msgObject = self:_unmarshalMessage(message)
+        self:_bnMessageListener(msgObject)
     end
 end
 
 -- Split text into a list consisting of the strings in text,
 -- separated by strings matching delimiter (which may be a pattern).
 -- example: strsplit(",%s*", "Anna, Bob, Charlie,Dolores")
-function MessagingLayer:StringSplit(delimiter, text)
+function MessagingLayer:_stringSplit(delimiter, text)
   local list = {}
   local pos = 1
   if strfind("", delimiter, 1) then -- this would result in endless loops
@@ -110,9 +111,9 @@ function MessagingLayer:StringSplit(delimiter, text)
   return list
 end
 
-function MessagingLayer:UnmarshalMessage(rawMessage)
+function MessagingLayer:_unmarshalMessage(rawMessage)
 
-    local messageParts = self:StringSplit(QLTalk.MSG_SEPARATOR, rawMessage)
+    local messageParts = self:_stringSplit(QLTalk.MSG_SEPARATOR, rawMessage)
 
     local messageType = messageParts[1]
 

@@ -43,14 +43,14 @@ function ChatLayer:SendChatMessage(fromCharacter, fromGuild, fromRealm, messageT
     }
 
     self.messageCache:AddChatMessage(chatMessage)
-    self:onChatMessageListener(chatMessage.character, chatMessage.guild, chatMessage.realm, chatMessage.message)
+    self:_notifyChatMessageListener(chatMessage)
 
     self.messagingLayer:SendLocalMessage(chatMessage)
     self.messagingLayer:SendBNMessage(chatMessage)
 end
 
 function ChatLayer:RegisterOnChatMessage(onChatMessageListener)
-    self.onChatMessageListener = onChatMessageListener
+    self._onChatMessageListener = onChatMessageListener
 end
 
 function ChatLayer:_localMessageReceived(message)
@@ -84,7 +84,7 @@ function ChatLayer:_bnMessageReceived(chatMessage)
 end
 
 function ChatLayer:_notifyChatMessageListener(chatMessage)
-    self:onChatMessageListener(chatMessage.character, chatMessage.guild, chatMessage.realm, chatMessage.message)
+    self:_onChatMessageListener(chatMessage.character, chatMessage.guild, chatMessage.realm, chatMessage.message)
 end
 
 QLTalk.ChatLayer = ChatLayer

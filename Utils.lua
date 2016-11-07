@@ -1,8 +1,8 @@
 local addonName, QLTalk = ...
 local L = QLTalk.L
 
-function QLTalk:error()
-    print("You are not in a guild and cannot use this addon. Bummer...")
+function QLTalk:ErrorNotInGuild()
+    print("You are not in a guild and cannot use QLTalk.")
 end
 
 local function GetDumpIndentFormatting(indent)
