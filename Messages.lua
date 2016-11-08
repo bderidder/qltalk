@@ -26,8 +26,15 @@ function QLTalk.AbstractMessage:createMessage()
     rawMessage = self:getMessageName();
     parameters = self:getParameterArray();
     for i=1,#parameters do
+
+        local parameterValue = parameters[i]
+
+        if (parameterValue == nil) then
+            parameterValue = ''
+        end
+
         rawMessage = rawMessage .. QLTalk.MSG_SEPARATOR;
-        rawMessage = rawMessage .. parameters[i];
+        rawMessage = rawMessage .. parameterValue;
     end
 
     return rawMessage;

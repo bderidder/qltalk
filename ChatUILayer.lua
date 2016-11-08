@@ -12,14 +12,13 @@ function ChatUILayer:new(chatLayer)
 end
 
 function ChatUILayer:InitLayer()
-    QLTalk:Debug("QLTalk.ChatUILayer:InitLayer()")
+    QLTalk:Debug("ChatUILayer:InitLayer()")
 
     local mySelf = self
 
     QLTalk:RegisterChatCommand(
         "ql",
         function(msg)
-            QLTalk:Debug("anonymous ql handler")
             mySelf:_createNewMessage(msg)
         end
     )
@@ -33,20 +32,16 @@ function ChatUILayer:InitLayer()
 end
 
 function ChatUILayer:_createNewMessage(msg)
-    QLTalk:Debug("createNewMessage")
+    QLTalk:Debug("ChatUILayer:_createNewMessage() - got message, sending out")
 
     guildName, guildRankName, guildRankIndex = GetGuildInfo("Player")
     name, realm = UnitName("Player")
 
-    if(guildName ~= nil) then
-        self.chatLayer:SendChatMessage(name, guildName, GetRealmName(), msg)
-    else
-        QLTalk:ErrorNotInGuild()
-    end
+    self.chatLayer:SendChatMessage(name, guildName, GetRealmName(), msg)
 end
 
 function ChatUILayer:_localChatMsgHandler(fromName, fromGuild, fromRealm, message)
-    QLTalk:Debug("QLTalk:localChatMsgHandler")
+    QLTalk:Debug("ChatUILayer:_localChatMsgHandler() - received message, rendering in chat frame")
     DEFAULT_CHAT_FRAME:AddMessage(
         self:_formatMessagePrefix(fromName, fromGuild, fromRealm) 
         .. message, 

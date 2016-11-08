@@ -11,7 +11,7 @@ function MessagingLayer:new()
 end
 
 function MessagingLayer:InitLayer()
-    QLTalk:Debug("QLTalk.MessagingLayer:InitLayer()")
+    QLTalk:Debug("MessagingLayer:InitLayer")
 
     local mySelf = self
 
@@ -52,7 +52,15 @@ function MessagingLayer:RegisterBNMessageListener(bnMessageListener)
 end
 
 function MessagingLayer:_sendLocalMessage(localRawMessage)
-    SendAddonMessage(QLTalk.QLTALK_ADDON_MSG_PREFIX, rawMessage, "GUILD")
+
+    guildName, guildRankName, guildRankIndex = GetGuildInfo("Player")
+
+    if(guildName ~= nil) then
+        QLTalk:Debug("MessagingLayer:_sendLocalMessage() - sending message on GUILD addon channel")
+        SendAddonMessage(QLTalk.QLTALK_ADDON_MSG_PREFIX, rawMessage, "GUILD")
+    else
+        QLTalk:Debug("MessagingLayer:_sendLocalMessage() - player is not in a guild, not sending out on guild")
+    end
 end
 
 function MessagingLayer:_broadcastBNMessage(bnRawMessage)
@@ -66,6 +74,7 @@ function MessagingLayer:_broadcastBNMessage(bnRawMessage)
         canSoR, isReferAFriend, canSummonFriend = BNGetFriendInfo(i);
 
         if (isOnline and (client == "WoW")) then
+            QLTalk:Debug("MessagingLayer:_broadcastBNMessage() - sending message to BN friend '" .. accountName .. "' on character " .. characterName)
             BNSendGameData(bnetIDGameAccount, QLTalk.QLTALK_BN_MSG_PREFIX, bnRawMessage)
         end
 
