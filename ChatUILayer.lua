@@ -30,6 +30,13 @@ function ChatUILayer:InitLayer()
         end
     )
 
+    QLTalk:RegisterChatCommand(
+        "qlinfo",
+        function()
+            mySelf:_printInfo()
+        end
+    )
+
     self.chatLayer:RegisterOnChatMessage(
         function(self, fromName, fromGuild, fromRealm, message)
             mySelf:_localChatMsgHandler(fromName, fromGuild, fromRealm, message)
@@ -56,6 +63,12 @@ function ChatUILayer:_toggleDebug()
         QLTalk.DEBUG = true
         ChatUILayer:_printChatMessage("QLTalk debug messages is now ON")
     end
+end
+
+function ChatUILayer:_printInfo()
+    QLTalk:Debug("ChatUILayer:_printInfo()")
+
+    QLTalk:Print('QLTalk version ' .. QLTalk.VERSION)
 end
 
 function ChatUILayer:_localChatMsgHandler(fromName, fromGuild, fromRealm, message)
