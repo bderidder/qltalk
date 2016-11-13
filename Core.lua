@@ -6,6 +6,7 @@ LibStub("AceAddon-3.0"):NewAddon(QLTalk, addonName, "AceConsole-3.0")
 function QLTalk:OnInitialize()
   -- Startup Message
   QLTalk:Print('QLTalk version ' .. QLTalk.VERSION .. ' loaded and ready to talk')
+  QLTalk:Print('Type /qldebug to toggle debug messages on or off')
 
   QLTalk:Setup()
 end

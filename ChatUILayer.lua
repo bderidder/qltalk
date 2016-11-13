@@ -22,7 +22,13 @@ function ChatUILayer:InitLayer()
             mySelf:_createNewMessage(msg)
         end
     )
-    QLTalk:RegisterChatCommand("qltalk", "createNewMessage")
+
+    QLTalk:RegisterChatCommand(
+        "qldebug",
+        function()
+            mySelf:_toggleDebug()
+        end
+    )
 
     self.chatLayer:RegisterOnChatMessage(
         function(self, fromName, fromGuild, fromRealm, message)
@@ -40,17 +46,33 @@ function ChatUILayer:_createNewMessage(msg)
     self.chatLayer:SendChatMessage(name, guildName, GetRealmName(), msg)
 end
 
+function ChatUILayer:_toggleDebug()
+    QLTalk:Debug("ChatUILayer:_toggleDebug()")
+
+    if (QLTalk.DEBUG) then
+        QLTalk.DEBUG = false
+        ChatUILayer:_printChatMessage("QLTalk debug messages is now OFF")
+    else
+        QLTalk.DEBUG = true
+        ChatUILayer:_printChatMessage("QLTalk debug messages is now ON")
+    end
+end
+
 function ChatUILayer:_localChatMsgHandler(fromName, fromGuild, fromRealm, message)
-    QLTalk:Debug("ChatUILayer:_localChatMsgHandler() - received message, rendering in chat frame")
-    DEFAULT_CHAT_FRAME:AddMessage(
-        self:_formatMessagePrefix(fromName, fromGuild, fromRealm) 
-        .. message, 
-        255/255, 0/255, 0/255
-    )
+    QLTalk:Debug("ChatUILayer:_localChatMsgHandler() - rendering in chat frame")
+    self:_printChatMessage(self:_formatMessagePrefix(fromName, fromGuild, fromRealm) .. message)
 end
 
 function ChatUILayer:_formatMessagePrefix(fromName, fromGuild, fromRealm)
     return "\[QLTalk\] <" .. fromName .. "-" .. fromRealm .. "> "
+end
+
+function ChatUILayer:_printChatMessage(message)
+    QLTalk:Debug("ChatUILayer:_printChatMessage()")
+    DEFAULT_CHAT_FRAME:AddMessage(
+        message, 
+        255/255, 0/255, 0/255
+    )
 end
 
 QLTalk.ChatUILayer = ChatUILayer

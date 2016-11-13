@@ -20,11 +20,12 @@ function MessageCache:IsChatMessageInCache(chatMessage)
 
         if cachedMessage.timestamp == chatMessage.timestamp
             and
-           cachedMessage.messageId == chatMessage.messageId
+           cachedMessage.messageId == chatMessage.messageId 
             and
            cachedMessage.character == chatMessage.character
             and
-           cachedMessage.realm == chatMessage.realm then
+           cachedMessage.realm == chatMessage.realm
+        then
            return true
         end
 

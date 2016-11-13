@@ -51,24 +51,23 @@ function ChatLayer:RegisterOnChatMessage(onChatMessageListener)
     self._onChatMessageListener = onChatMessageListener
 end
 
-function ChatLayer:_localMessageReceived(message)
+function ChatLayer:_localMessageReceived(chatMessage)
 
-    if self.messageCache:IsChatMessageInCache(message) then
+    if self.messageCache:IsChatMessageInCache(chatMessage) then
         QLTalk:Debug("Message received from local GUILD and it is already in our cache, ignoring")
         -- ignore message
     else
         QLTalk:Debug("Message received from local GUILD and it is not in our cache, broadcasting to BN friends")
         self.messageCache:AddChatMessage(chatMessage)
         self:_notifyChatMessageListener(chatMessage)
-        self.messagingLayer:SendBNMessage(message)
+        self.messagingLayer:SendBNMessage(chatMessage)
     end
-
 
 end
 
 function ChatLayer:_bnMessageReceived(chatMessage)
 
-    if self.messageCache:IsChatMessageInCache(message) then
+    if self.messageCache:IsChatMessageInCache(chatMessage) then
         QLTalk:Debug("Message received from Battle.net and it is already in our cache, ignoring")
         -- ignore message
     else
