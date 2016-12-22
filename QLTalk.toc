@@ -16,4 +16,6 @@ BNFriends.lua
 Messages.lua
 MessagingLayer.lua
 ChatLayer.lua
-ChatUILayer.lua
+ChatCLILayer.lua
+ChatWindow.lua
+##QLTalk.xml

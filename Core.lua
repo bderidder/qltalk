@@ -12,6 +12,7 @@ function QLTalk:OnInitialize()
 end
 
 function QLTalk:Setup()
+
   QLTalk.frame = CreateFrame("FRAME", "QLTalkFrame")
 
   local messagingLayer = QLTalk.MessagingLayer:new()
@@ -20,7 +21,10 @@ function QLTalk:Setup()
   local chatLayer = QLTalk.ChatLayer:new(messagingLayer)
   chatLayer:InitLayer()
 
-  local chatUILayer = QLTalk.ChatUILayer:new(chatLayer)
-  chatUILayer:InitLayer()
+  local chatCLILayer = QLTalk.ChatCLILayer:new(chatLayer)
+  chatCLILayer:InitLayer()
+
+  local chatWindow = QLTalk.ChatWindow:new(chatLayer)
+  chatWindow:InitWindow()
 
 end
