@@ -31,6 +31,11 @@ function ChatLayer:InitLayer()
 end
 
 function ChatLayer:SendChatMessage(fromCharacter, fromGuild, fromRealm, messageText)
+
+    if (string.len(messageText) < 1) then
+        return
+    end
+
     chatMessage = QLTalk.ChatMessage:new{
         timestamp = tostring(time()),
         messageId = tostring(math.random(QLTalk.RANDOM_MAX)),
