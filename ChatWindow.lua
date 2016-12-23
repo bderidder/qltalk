@@ -23,6 +23,20 @@ function ChatWindow:InitWindow()
             mySelf:_localChatMsgHandler(fromName, fromGuild, fromRealm, message)
         end
     )
+
+	QLTalk.onEventDispatcher:RegisterEventListener(
+        "PLAYER_REGEN_DISABLED",
+        function(self, event, ...)
+            mySelf.frame:Hide()
+        end
+    )
+
+    QLTalk.onEventDispatcher:RegisterEventListener(
+        "PLAYER_REGEN_ENABLED",
+        function(self, event, ...)
+            mySelf.frame:Show()
+        end
+    )
 end
 
 function ChatWindow:_createNewMessage(msg)
@@ -60,7 +74,7 @@ function ChatWindow:_initUI()
 	local mySelf = self
 
 	local frame  = CreateFrame("Frame", "QLTalk_ChatWindow", UIParent)
-	frame.width  = 400
+	frame.width  = 450
 	frame.height = 300
 	frame:SetFrameStrata("MEDIUM")
 	frame:SetSize(frame.width, frame.height)

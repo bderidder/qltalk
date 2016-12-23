@@ -17,18 +17,22 @@ function MessagingLayer:InitLayer()
 
     RegisterAddonMessagePrefix(QLTalk.QLTALK_ADDON_MSG_PREFIX)
     RegisterAddonMessagePrefix(QLTalk.QLTALK_BN_MSG_PREFIX)
-    QLTalk.frame:RegisterEvent("CHAT_MSG_ADDON")
-    QLTalk.frame:RegisterEvent("BN_CHAT_MSG_ADDON")
-    QLTalk.frame:SetScript(
-        "OnEvent",
+
+    QLTalk.onEventDispatcher:RegisterEventListener(
+        "CHAT_MSG_ADDON",
         function(self, event, ...)
-            if (event == "CHAT_MSG_ADDON") then
-                local prefix, message, type, senderId = ...
-                mySelf:_localChatMsgHandler(event, prefix, message, type, senderId)
-            elseif (event == "BN_CHAT_MSG_ADDON") then
-                local prefix, message, type, senderId = ...
-                mySelf:_bnChatMsgHandler(event, prefix, message, type, senderId)
-            end
+            local prefix, message, type, senderId = ...
+            QLTalk:Debug("MessagingLayer:InitLayer - received message from CHAT_MSG_ADDON")
+            mySelf:_localChatMsgHandler(event, prefix, message, type, senderId)
+        end
+    )
+
+    QLTalk.onEventDispatcher:RegisterEventListener(
+        "BN_CHAT_MSG_ADDON",
+        function(self, event, ...)
+            local prefix, message, type, senderId = ...
+            QLTalk:Debug("MessagingLayer:InitLayer - received message from BN_CHAT_MSG_ADDON")
+            mySelf:_bnChatMsgHandler(event, prefix, message, type, senderId)
         end
     )
 end

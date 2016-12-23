@@ -15,6 +15,10 @@ function QLTalk:Setup()
 
   QLTalk.frame = CreateFrame("FRAME", "QLTalkFrame")
 
+  local onEventDispatcher = QLTalk.OnEventDispatcher:new()
+  onEventDispatcher:InitDispatcher()
+  QLTalk.onEventDispatcher = onEventDispatcher
+
   local messagingLayer = QLTalk.MessagingLayer:new()
   messagingLayer:InitLayer()
 
