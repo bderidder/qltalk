@@ -57,7 +57,7 @@ function ChatWindow:_formatMessagePrefix(fromName, fromGuild, fromRealm)
 
 	local nowTime = date("%H:%M:%S")
 
-    return nowTime .. " <" .. fromName .. "-" .. fromRealm .. "> "
+    return nowTime .. " <" .. fromName .. "> "
 end
 
 function ChatWindow:_printChatMessage(message)
@@ -74,8 +74,8 @@ function ChatWindow:_initUI()
 	local mySelf = self
 
 	local frame  = CreateFrame("Frame", "QLTalk_ChatWindow", UIParent)
-	frame.width  = 450
-	frame.height = 300
+	frame.width  = 350
+	frame.height = 200
 	frame:SetFrameStrata("MEDIUM")
 	frame:SetSize(frame.width, frame.height)
 	frame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
