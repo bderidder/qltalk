@@ -2,7 +2,7 @@
 ## Title: QLTalk
 ## Author: Letodas, Quartiz
 ## Notes: A chat channel that merge guilds on several servers together through Real ID friends. This will allow you to use a single guild channel for all servers.
-## Version: 1.1
+## Version: 1.2
 
 libs\LibStub\LibStub.lua
 libs\AceAddon-3.0\AceAddon-3.0.xml
