@@ -81,7 +81,6 @@ function ChatWindow:_initUI()
 	frame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
 	frame:SetBackdrop({
 		bgFile   = "Interface\\DialogFrame\\UI-DialogBox-Background",
-		--edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border",
 		tile     = true,
 		tileSize = 32,
 		edgeSize = 32,
@@ -91,23 +90,27 @@ function ChatWindow:_initUI()
 	frame:EnableMouse(true)
 	frame:EnableMouseWheel(true)
 
+	self.frame = frame
+
 	-- Make movable/resizable
 	frame:SetMovable(true)
 	frame:SetResizable(enable)
-	frame:SetMinResize(100, 100)
+	frame:SetMinResize(150, 120)
 	frame:RegisterForDrag("LeftButton")
 	frame:SetScript("OnDragStart", frame.StartMoving)
 	frame:SetScript("OnDragStop", frame.StopMovingOrSizing)
 
-	self.frame = frame
+	frame:SetResizable(true)
+
+	local left, bottom, frameWidth, frameHeight = frame:GetRect()
 
 	--tinsert(UISpecialFrames, "QLTalk_ChatWindow")
 
 	-- Chat Input
 	local chatInput = CreateFrame("EditBox", nil, frame, "InputBoxTemplate")
-	chatInput:SetPoint("BOTTOM", 0, 10)
+	chatInput:SetPoint("BOTTOMLEFT", 15, 10)
 	chatInput:SetHeight(25)
-	chatInput:SetWidth(frame.width - 50)
+	chatInput:SetWidth(frameWidth - 50)
 	chatInput:SetAutoFocus(false)
 	chatInput:SetScript(
 		"OnEnterPressed", 
@@ -122,7 +125,7 @@ function ChatWindow:_initUI()
 	-- ScrollingMessageFrame
 	local messageFrame = CreateFrame("ScrollingMessageFrame", nil, frame)
 	messageFrame:SetPoint("TOPLEFT", 15, -15)
-	messageFrame:SetSize(frame.width - 50, frame.height - 60)
+	messageFrame:SetSize(frameWidth - 50, frameHeight - 60)
 	messageFrame:SetFontObject(GameFontNormal)
 	messageFrame:SetTextColor(1, 1, 1, 1) -- default color
 	messageFrame:SetJustifyH("LEFT")
@@ -140,7 +143,7 @@ function ChatWindow:_initUI()
 	-------------------------------------------------------------------------------
 	local scrollBar = CreateFrame("Slider", nil, frame, "UIPanelScrollBarTemplate")
 	scrollBar:SetPoint("RIGHT", frame, "RIGHT", -10, 10)
-	scrollBar:SetSize(30, frame.height - 90)
+	scrollBar:SetSize(30, frameHeight - 90)
 	scrollBar:SetMinMaxValues(0, 9)
 	scrollBar:SetValueStep(1)
 	scrollBar.scrollStep = 1
@@ -151,6 +154,28 @@ function ChatWindow:_initUI()
 	end)
 
 	scrollBar:SetValue(select(2, scrollBar:GetMinMaxValues()))
+
+	local dragBottomRight = CreateFrame("Button", "RecountResizeGripRight", frame) -- Grip Buttons from Omen2
+	dragBottomRight:Show()
+	dragBottomRight:SetFrameLevel(frame:GetFrameLevel() + 10)
+	dragBottomRight:SetNormalTexture("Interface\\AddOns\\qltalk\\textures\\ResizeGripRight")
+	dragBottomRight:SetHighlightTexture("Interface\\AddOns\\qltalk\\textures\\ResizeGripRight")
+	dragBottomRight:SetWidth(16)
+	dragBottomRight:SetHeight(16)
+	dragBottomRight:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", 0, 0)
+	dragBottomRight:EnableMouse(true)
+	dragBottomRight:SetScript(
+		"OnMouseDown", 
+		function(self, button)
+			self:GetParent():StartSizing("BOTTOMRIGHT")
+		end
+	)
+	dragBottomRight:SetScript(
+		"OnMouseUp", 
+		function(self, button)
+			self:GetParent():StopMovingOrSizing()
+		end
+	)
 
 	frame:SetScript("OnMouseWheel", function(self, delta)
 		--print(messageFrame:GetNumMessages())
@@ -184,8 +209,22 @@ function ChatWindow:_initUI()
 		)
 	end
 
+	frame:SetScript(
+		"OnSizeChanged", 
+		function(self)
+			mySelf:ResizeWindow();
+		end
+	)
+
 	frame:Show()
 
+end
+
+function ChatWindow:ResizeWindow()
+	local left, bottom, frameWidth, frameHeight = self.frame:GetRect()
+	self.frame.chatInput:SetWidth(frameWidth - 50)
+	self.frame.messageFrame:SetSize(frameWidth - 50, frameHeight - 60)
+	self.frame.scrollBar:SetSize(30, frameHeight - 90)
 end
 
 QLTalk.ChatWindow = ChatWindow
