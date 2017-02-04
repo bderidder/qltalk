@@ -89,18 +89,9 @@ function ChatWindow:_initUI()
 	frame:SetBackdropColor(0, 0, 0, 1)
 	frame:EnableMouse(true)
 	frame:EnableMouseWheel(true)
+	frame:SetMinResize(150, 120)
 
 	self.frame = frame
-
-	-- Make movable/resizable
-	frame:SetMovable(true)
-	frame:SetResizable(enable)
-	frame:SetMinResize(150, 120)
-	frame:RegisterForDrag("LeftButton")
-	frame:SetScript("OnDragStart", frame.StartMoving)
-	frame:SetScript("OnDragStop", frame.StopMovingOrSizing)
-
-	frame:SetResizable(true)
 
 	local left, bottom, frameWidth, frameHeight = frame:GetRect()
 
@@ -155,7 +146,7 @@ function ChatWindow:_initUI()
 
 	scrollBar:SetValue(select(2, scrollBar:GetMinMaxValues()))
 
-	local dragBottomRight = CreateFrame("Button", "RecountResizeGripRight", frame) -- Grip Buttons from Omen2
+	local dragBottomRight = CreateFrame("Button", "RecountResizeGripRight", frame)
 	dragBottomRight:Show()
 	dragBottomRight:SetFrameLevel(frame:GetFrameLevel() + 10)
 	dragBottomRight:SetNormalTexture("Interface\\AddOns\\qltalk\\textures\\ResizeGripRight")
@@ -167,15 +158,38 @@ function ChatWindow:_initUI()
 	dragBottomRight:SetScript(
 		"OnMouseDown", 
 		function(self, button)
-			self:GetParent():StartSizing("BOTTOMRIGHT")
+			if (not frame.lockMoveSize:GetChecked()) then
+				self:GetParent():StartSizing("BOTTOMRIGHT")
+			end
 		end
 	)
 	dragBottomRight:SetScript(
 		"OnMouseUp", 
 		function(self, button)
 			self:GetParent():StopMovingOrSizing()
+			frame.lockMoveSize:SetChecked(true)
+			mySelf:_DisableResizeMove()
 		end
 	)
+	frame.dragBottomRight = dragBottomRight
+
+	local lockMoveSize = CreateFrame("CheckButton", nil, frame, "UICheckButtonTemplate")
+	--lockMoveSize:Show()
+	--lockMoveSize:SetFrameLevel(frame:GetFrameLevel() + 11)
+	lockMoveSize:SetPoint("BOTTOMRIGHT", -10, 7)
+	lockMoveSize:SetSize(25, 25)
+	lockMoveSize:SetChecked(true)
+	lockMoveSize:SetScript(
+		"OnClick", 
+		function(self, button)
+			if (frame.lockMoveSize:GetChecked()) then
+				mySelf:_DisableResizeMove()
+			else
+				mySelf:_EnableResizeMove()
+			end
+		end
+	)
+	frame.lockMoveSize = lockMoveSize
 
 	frame:SetScript("OnMouseWheel", function(self, delta)
 		--print(messageFrame:GetNumMessages())
@@ -217,6 +231,42 @@ function ChatWindow:_initUI()
 	)
 
 	frame:Show()
+	mySelf:_DisableResizeMove()
+
+end
+
+function ChatWindow:_DisableResizeMove()
+
+	self.frame:SetMovable(false)
+	self.frame:SetResizable(false)
+	
+	self.frame:RegisterForDrag()
+	self.frame:SetScript("OnDragStart", nil)
+	self.frame:SetScript("OnDragStop", nil)
+
+	self.frame.dragBottomRight:Hide()
+
+end
+
+function ChatWindow:_EnableResizeMove()
+
+	local mySelf = self
+
+	self.frame:SetMovable(true)
+	self.frame:SetResizable(true)
+	
+	self.frame:RegisterForDrag("LeftButton")
+	self.frame:SetScript("OnDragStart", self.frame.StartMoving)
+	self.frame:SetScript(
+		"OnDragStop", 
+		function(self)
+			mySelf.frame:StopMovingOrSizing()
+			mySelf.frame.lockMoveSize:SetChecked(true)
+			mySelf:_DisableResizeMove()
+		end
+	)
+
+	self.frame.dragBottomRight:Show()
 
 end
 
