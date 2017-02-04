@@ -1,7 +1,7 @@
 local addonName, QLTalk = ...
 local L = QLTalk.L
 
-QLTalk.VERSION = "1.2"
+QLTalk.VERSION = "1.3"
 
 QLTalk.DEBUG = false
 
