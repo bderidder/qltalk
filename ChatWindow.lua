@@ -91,6 +91,9 @@ function ChatWindow:_initUI()
 	frame:EnableMouseWheel(true)
 	frame:SetMinResize(150, 120)
 
+	frame:SetMovable(true)
+	frame:SetResizable(true)
+
 	self.frame = frame
 
 	local left, bottom, frameWidth, frameHeight = frame:GetRect()
@@ -167,8 +170,8 @@ function ChatWindow:_initUI()
 		"OnMouseUp", 
 		function(self, button)
 			self:GetParent():StopMovingOrSizing()
-			frame.lockMoveSize:SetChecked(true)
-			mySelf:_DisableResizeMove()
+			--frame.lockMoveSize:SetChecked(true)
+			--mySelf:_DisableResizeMove()
 		end
 	)
 	frame.dragBottomRight = dragBottomRight
@@ -237,8 +240,8 @@ end
 
 function ChatWindow:_DisableResizeMove()
 
-	self.frame:SetMovable(false)
-	self.frame:SetResizable(false)
+	--self.frame:SetMovable(false)
+	--self.frame:SetResizable(false)
 	
 	self.frame:RegisterForDrag()
 	self.frame:SetScript("OnDragStart", nil)
@@ -252,8 +255,8 @@ function ChatWindow:_EnableResizeMove()
 
 	local mySelf = self
 
-	self.frame:SetMovable(true)
-	self.frame:SetResizable(true)
+	--self.frame:SetMovable(true)
+	--self.frame:SetResizable(true)
 	
 	self.frame:RegisterForDrag("LeftButton")
 	self.frame:SetScript("OnDragStart", self.frame.StartMoving)
@@ -261,8 +264,8 @@ function ChatWindow:_EnableResizeMove()
 		"OnDragStop", 
 		function(self)
 			mySelf.frame:StopMovingOrSizing()
-			mySelf.frame.lockMoveSize:SetChecked(true)
-			mySelf:_DisableResizeMove()
+			--mySelf.frame.lockMoveSize:SetChecked(true)
+			--mySelf:_DisableResizeMove()
 		end
 	)
 
