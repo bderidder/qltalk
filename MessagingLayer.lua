@@ -15,8 +15,8 @@ function MessagingLayer:InitLayer()
 
     local mySelf = self
 
-    RegisterAddonMessagePrefix(QLTalk.QLTALK_ADDON_MSG_PREFIX)
-    RegisterAddonMessagePrefix(QLTalk.QLTALK_BN_MSG_PREFIX)
+    C_ChatInfo.RegisterAddonMessagePrefix(QLTalk.QLTALK_ADDON_MSG_PREFIX)
+    C_ChatInfo.RegisterAddonMessagePrefix(QLTalk.QLTALK_BN_MSG_PREFIX)
 
     QLTalk.onEventDispatcher:RegisterEventListener(
         "CHAT_MSG_ADDON",
@@ -61,7 +61,7 @@ function MessagingLayer:_sendLocalMessage(localRawMessage)
 
     if(guildName ~= nil) then
         QLTalk:Debug("MessagingLayer:_sendLocalMessage() - sending message on GUILD addon channel")
-        SendAddonMessage(QLTalk.QLTALK_ADDON_MSG_PREFIX, rawMessage, "GUILD")
+        C_ChatInfo.SendAddonMessage(QLTalk.QLTALK_ADDON_MSG_PREFIX, rawMessage, "GUILD")
     else
         QLTalk:Debug("MessagingLayer:_sendLocalMessage() - player is not in a guild, not sending out on guild")
     end
