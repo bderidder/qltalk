@@ -1,4 +1,4 @@
-## Interface: 70100
+## Interface: 80000
 ## Title: QLTalk
 ## Author: Letodas, Quartiz
 ## Notes: A chat channel that merge guilds on several servers together through Real ID friends. This will allow you to use a single guild channel for all servers.
